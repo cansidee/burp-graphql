@@ -112,4 +112,4 @@ For authenticated targets, add a Burp **Session Handling Rule** or configure the
 
 ## License
 
-MIT
+https://www.youtube.com/watch?v=slyVzaxaCEw
