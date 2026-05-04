@@ -19,27 +19,8 @@
 
 ## Screenshots
 
-```
-┌─ GraphQL Schema Parser ──────────────────────────────────────────────────┐
-│ Endpoint: https://api.example.com/graphql  [Fetch Schema]  Loaded: 47 ops │
-├───────────────────────────┬──────────────────────────────────────────────┤
-│ GraphQL Schema            │ getUserById(id: ID!): User                   │
-│ ├─ Queries                │ Return type: User                            │
-│ │  ├─ No Arguments        │ Arguments:                                   │
-│ │  │  └─ me               │   id   ID!   [REQUIRED]                     │
-│ │  ├─ Optional Args Only  │                                              │
-│ │  │  └─ users            │ Generated Query:                             │
-│ │  └─ Required Args       │ query($id: ID!) {                            │
-│ │     └─ getUserById  ◄   │   getUserById(id: $id) {                     │
-│ ├─ Mutations              │     id                                       │
-│ │  └─ Required Args       │     name                                     │
-│ │     └─ createUser       │     email                                    │
-│ └─ Subscriptions          │   }                                          │
-│    └─ No Arguments        │ }                                            │
-│       └─ onMessageAdded   │                                              │
-│                           │ [Send to Repeater] [Send to Repeater (group)]│
-└───────────────────────────┴──────────────────────────────────────────────┘
-```
+<img width="1509" height="806" alt="Screenshot 2026-05-04 at 16 43 01" src="https://github.com/user-attachments/assets/33da3522-4a3a-4157-b192-c934bd57a633" />
+
 
 ---
 
