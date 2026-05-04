@@ -5,6 +5,17 @@
 
 ---
 
+## Installation (no build required)
+
+1. Download the latest JAR from [**Releases**](https://github.com/cansidee/burp-graphql/releases/latest)
+2. Open Burp Suite → **Extensions** → **Installed** → **Add**
+3. Extension type: **Java**
+4. Select the downloaded `.jar` file → **Next**
+
+The **GraphQL Schema Parser** tab appears at the top of the Burp Suite UI.
+
+---
+
 ## Features
 
 - **Schema introspection** via standard `__schema` query — sent through Burp's HTTP engine so session-handling rules, auth headers, and cookies apply automatically
@@ -21,43 +32,6 @@
 
 <img width="1509" height="806" alt="Screenshot 2026-05-04 at 16 43 01" src="https://github.com/user-attachments/assets/33da3522-4a3a-4157-b192-c934bd57a633" />
 
-
----
-
-## Requirements
-
-| Tool | Version |
-|------|---------|
-| Java | 17+ |
-| Maven | 3.8+ |
-| Burp Suite | Professional or Community 2023.x+ (Montoya API) |
-
----
-
-## Build
-
-```bash
-git clone https://github.com/cansidee/burp-graphql.git
-cd burp-graphql
-mvn clean package
-```
-
-The fat JAR (Jackson bundled, relocated to avoid classpath conflicts) is output to:
-
-```
-target/graphql-schema-parser-1.0.0.jar
-```
-
----
-
-## Installation
-
-1. Open Burp Suite → **Extensions** → **Installed** → **Add**
-2. Extension type: **Java**
-3. Select `target/graphql-schema-parser-1.0.0.jar`
-4. Click **Next**
-
-The **GraphQL Schema Parser** tab appears at the top level of the Burp Suite UI.
 
 ---
 
@@ -98,55 +72,27 @@ For `Required Args` operations, the `variables` object is sent as `{}` — fill 
 
 ---
 
-## How it works
+## Build from source
 
-```
-SchemaFetcher          IntrospectionParser        QueryGenerator
-──────────────         ───────────────────        ──────────────
-POST __schema    →     build typeMap         →    resolve return type
-via Montoya HTTP        group fields by args       pick scalar leaves
-                        (No Args / Opt / Req)      emit query string
-                              │
-                        SchemaTreePanel
-                        ────────────────
-                        JTree (3 levels)
-                        selection → DetailPanel
-                                    ──────────
-                                    signature · args · query · buttons
+Requirements: Java 17+, Maven 3.8+
+
+```bash
+git clone https://github.com/cansidee/burp-graphql.git
+cd burp-graphql
+mvn clean package
+# → target/graphql-schema-parser-1.0.0.jar
 ```
 
-**Key implementation notes:**
-- `api.http().sendRequest()` — Burp proxy / session rules applied
-- Jackson shaded to `com.burpgraphql.shaded.jackson` — no classpath conflict with Burp's own Jackson
-- `SwingWorker` — fetch on background thread, UI update on EDT
-- Siblings list shared by reference — "send all" needs zero extra traversal
+> Jackson is shaded into `com.burpgraphql.shaded.jackson` so it never conflicts with Burp's own classpath.
 
 ---
 
-## Project layout
+## Requirements
 
-```
-src/main/java/com/burpgraphql/
-├── extension/
-│   └── GraphQLSchemaParser.java      # BurpExtension entry point
-├── schema/
-│   ├── model/
-│   │   ├── TypeRef.java              # NON_NULL / LIST wrapper, toGraphQLString()
-│   │   ├── ArgDef.java
-│   │   ├── FieldDef.java             # getGroup() classification logic
-│   │   ├── TypeDef.java
-│   │   └── IntrospectionResponse.java
-│   └── IntrospectionParser.java      # builds typeMap, splits Q/M/S
-├── generator/
-│   └── QueryGenerator.java           # scalar leaf selection, variable declarations
-├── http/
-│   └── SchemaFetcher.java            # introspection POST via Montoya Http
-└── ui/
-    ├── OperationContext.java          # field + opType + typeMap + siblings ref
-    ├── SchemaTreePanel.java           # JTree with 3-level structure
-    ├── DetailPanel.java               # signature, args, query, repeater buttons
-    └── MainTab.java                   # top bar + JSplitPane, SwingWorker
-```
+| Tool | Version |
+|------|---------|
+| Burp Suite | Professional or Community 2023.x+ (Montoya API) |
+| Java (runtime) | 17+ |
 
 ---
 
