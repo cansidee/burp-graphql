@@ -12,6 +12,15 @@
 
     <name>GraphQL Schema Parser</name>
     <description>Burp Suite Montoya API extension for GraphQL schema introspection</description>
+    <url>https://github.com/cansidee/burp-graphql</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -65,6 +74,9 @@
                                         <exclude>META-INF/*.DSA</exclude>
                                         <exclude>META-INF/*.RSA</exclude>
                                         <exclude>META-INF/MANIFEST.MF</exclude>
+                                        <!-- Drop non-relocated multi-release Jackson classes;
+                                             base (relocated) implementations remain at the jar root. -->
+                                        <exclude>META-INF/versions/**</exclude>
                                     </excludes>
                                 </filter>
                             </filters>
